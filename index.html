@@ -10,195 +10,97 @@
 <title>CPPS Tracker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
-
 :root {
-  --bg: #0f0f0f;
-  --bg2: #1a1a1a;
-  --bg3: #242424;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.15);
-  --text: #f0ede8;
-  --text2: #8a8680;
-  --text3: #5a5650;
-  --accent: #c8b89a;
-  --red: #d4614a;
-  --green: #5a9e7a;
-  --amber: #c49a3a;
-  --purple: #7a6eb8;
-  --teal: #3a8a78;
-  --r: 10px;
-  --r2: 16px;
+  --bg:#0f0f0f;--bg2:#1a1a1a;--bg3:#242424;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+  --text:#f0ede8;--text2:#8a8680;--text3:#5a5650;
+  --accent:#c8b89a;--red:#d4614a;--green:#5a9e7a;--amber:#c49a3a;
+  --purple:#7a6eb8;--teal:#3a8a78;--r:10px;
 }
-
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  min-height: 100dvh;
-  overflow-x: hidden;
-}
-
-.app {
-  max-width: 480px;
-  margin: 0 auto;
-  padding-bottom: 100px;
-}
-
-/* Header */
-.header {
-  padding: 56px 20px 18px;
-  border-bottom: 0.5px solid var(--border);
-}
-.header-top { display: flex; justify-content: space-between; align-items: flex-start; }
-.header h1 { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 400; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; }
-.header-date { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text3); }
-.header-nav { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
-.nav-btn { background: none; border: 0.5px solid var(--border2); color: var(--text2); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
-.nav-btn:active { background: var(--bg3); }
-.header-day { font-size: 26px; font-weight: 500; flex: 1; text-align: center; }
-.phase-pill { display: inline-block; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--accent); color: var(--accent); margin-top: 10px; }
-
-/* Bottom nav */
-.bottom-nav {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: rgba(15,15,15,0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 0.5px solid var(--border);
-  display: flex;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-  z-index: 100;
-}
-.nav-item {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  padding: 12px 4px 14px; cursor: pointer; gap: 5px;
-  border: none; background: none; color: var(--text3);
-  font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.04em;
-  transition: color 0.15s;
-}
-.nav-item.active { color: var(--accent); }
-.nav-icon { font-size: 22px; line-height: 1; }
-
-/* Sections */
-.section { display: none; padding: 20px 20px 16px; }
-.section.visible { display: block; }
-
-/* Exercise list */
-.ex-item {
-  display: flex; gap: 14px; align-items: flex-start;
-  padding: 16px 0;
-  border-bottom: 0.5px solid var(--border);
-}
-.ex-item:last-child { border-bottom: none; }
-.ex-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
-.ex-body { flex: 1; }
-.ex-name { font-size: 16px; font-weight: 500; color: var(--text); line-height: 1.3; }
-.ex-dose { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--accent); margin-top: 4px; }
-.ex-note { font-size: 13px; color: var(--text3); margin-top: 5px; font-style: italic; line-height: 1.4; }
-.check-btn {
-  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
-  border: 0.5px solid var(--border2); background: var(--bg2);
-  cursor: pointer; color: var(--text3); font-size: 18px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s; margin-top: 2px;
-}
-.check-btn.done { background: var(--green); border-color: var(--green); color: #fff; }
-
-.phase-note {
-  background: var(--bg2); border-left: 2px solid var(--accent); border-radius: 0 var(--r) var(--r) 0;
-  padding: 12px 16px; font-size: 13px; color: var(--text2); line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-/* Entry form */
-.field-group { margin-bottom: 20px; }
-.field-label { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em; color: var(--text2); text-transform: uppercase; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-.field-val { font-size: 24px; font-weight: 500; }
-.slider-row { display: flex; align-items: center; gap: 10px; }
-
-input[type=range] {
-  flex: 1; -webkit-appearance: none; appearance: none;
-  height: 3px; border-radius: 2px; outline: none; cursor: pointer;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 20px; height: 20px;
-  border-radius: 50%; cursor: pointer; border: 2px solid var(--bg);
-}
-input[type=range].sym { background: linear-gradient(to right, var(--red) 0%, var(--red) var(--pct,50%), var(--bg3) var(--pct,50%)); }
-input[type=range].sym::-webkit-slider-thumb { background: var(--red); }
-input[type=range].er { background: linear-gradient(to right, var(--green) 0%, var(--green) var(--pct,50%), var(--bg3) var(--pct,50%)); }
-input[type=range].er::-webkit-slider-thumb { background: var(--green); }
-input[type=range].st { background: linear-gradient(to right, var(--amber) 0%, var(--amber) var(--pct,50%), var(--bg3) var(--pct,50%)); }
-input[type=range].st::-webkit-slider-thumb { background: var(--amber); }
-
-.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.chip {
-  padding: 8px 14px; border-radius: 20px; border: 0.5px solid var(--border2);
-  font-size: 14px; cursor: pointer; color: var(--text2); background: var(--bg2);
-  transition: all 0.15s; user-select: none;
-}
-.chip.on { background: var(--bg3); color: var(--text); border-color: var(--accent); }
-
-textarea {
-  width: 100%; background: var(--bg2); border: 0.5px solid var(--border2);
-  border-radius: var(--r); color: var(--text); font-family: 'DM Sans', sans-serif;
-  font-size: 16px; padding: 14px; resize: none; min-height: 90px; outline: none;
-  line-height: 1.5;
-}
-textarea:focus { border-color: var(--accent); }
-
-.save-btn {
-  width: 100%; padding: 16px; border-radius: var(--r); border: none;
-  background: var(--accent); color: var(--bg); font-family: 'DM Sans', sans-serif;
-  font-size: 17px; font-weight: 500; cursor: pointer; margin-top: 12px;
-  transition: opacity 0.15s;
-}
-.save-btn:active { opacity: 0.8; }
-
-.toast {
-  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-  background: var(--bg3); border: 0.5px solid var(--border2); border-radius: var(--r);
-  padding: 10px 20px; font-size: 13px; color: var(--text);
-  opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 200;
-  white-space: nowrap;
-}
-.toast.show { opacity: 1; }
-
-/* Verlauf */
-.metric-row { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-bottom: 20px; }
-.metric { background: var(--bg2); border-radius: var(--r); padding: 14px 10px; text-align: center; border: 0.5px solid var(--border); }
-.metric-l { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
-.metric-v { font-size: 28px; font-weight: 500; }
-
-.chart-wrap { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--r); padding: 14px; margin-bottom: 20px; height: 160px; position: relative; }
-
-.entry-card {
-  background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--r);
-  padding: 12px 14px; margin-bottom: 8px;
-}
-.entry-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-.entry-date-label { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text2); }
-.score-row { display: flex; gap: 12px; }
-.score-pill { font-family: 'DM Mono', monospace; font-size: 12px; padding: 3px 8px; border-radius: 4px; }
-.score-pill.sym { background: rgba(212,97,74,0.15); color: var(--red); }
-.score-pill.er { background: rgba(90,158,122,0.15); color: var(--green); }
-.score-pill.st { background: rgba(196,154,58,0.15); color: var(--amber); }
-.entry-trigs { font-size: 12px; color: var(--text3); margin-top: 6px; }
-.entry-note { font-size: 13px; color: var(--text2); margin-top: 6px; line-height: 1.4; }
-.empty { text-align: center; color: var(--text3); font-size: 13px; padding: 40px 0; font-family: 'DM Mono', monospace; }
-.section-title { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; }
-
-/* Install hint */
-.install-hint {
-  background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--r);
-  padding: 14px 16px; margin-bottom: 20px; font-size: 14px; color: var(--text2);
-  line-height: 1.6;
-}
-.install-hint strong { color: var(--accent); font-weight: 500; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden}
+.app{max-width:480px;margin:0 auto;padding-bottom:100px}
+.header{padding:56px 20px 18px;border-bottom:0.5px solid var(--border)}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start}
+.header h1{font-family:'DM Mono',monospace;font-size:14px;font-weight:400;color:var(--text2);letter-spacing:0.08em;text-transform:uppercase}
+.header-date{font-family:'DM Mono',monospace;font-size:13px;color:var(--text3)}
+.header-nav{display:flex;align-items:center;gap:12px;margin-top:12px}
+.nav-btn{background:none;border:0.5px solid var(--border2);color:var(--text2);width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+.nav-btn:active{background:var(--bg3)}
+.header-day{font-size:26px;font-weight:500;flex:1;text-align:center}
+.phase-pill{display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;padding:5px 12px;border-radius:20px;border:0.5px solid var(--accent);color:var(--accent);margin-top:10px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,15,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:0.5px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0);z-index:100}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 4px 14px;cursor:pointer;gap:5px;border:none;background:none;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.04em;transition:color .15s}
+.nav-item.active{color:var(--accent)}
+.nav-icon{font-size:22px;line-height:1}
+.section{display:none;padding:20px}
+.section.visible{display:block}
+.time-block{margin-bottom:24px}
+.time-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.time-label::after{content:'';flex:1;height:0.5px;background:var(--border)}
+.tag-pill{font-size:9px;padding:1px 5px;border-radius:4px;font-family:'DM Mono',monospace;letter-spacing:0.04em}
+.tag-daily{background:rgba(200,184,154,0.12);color:var(--accent)}
+.tag-specific{background:rgba(122,110,184,0.12);color:var(--purple)}
+.ex-item{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:0.5px solid var(--border)}
+.ex-item:last-child{border-bottom:none}
+.ex-left{display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:3px}
+.ex-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ex-body{flex:1}
+.ex-name{font-size:16px;font-weight:500;color:var(--text);line-height:1.3}
+.ex-dose{font-family:'DM Mono',monospace;font-size:13px;color:var(--accent);margin-top:4px}
+.ex-note{font-size:13px;color:var(--text3);margin-top:5px;font-style:italic;line-height:1.4}
+.check-btn{width:40px;height:40px;border-radius:10px;flex-shrink:0;border:0.5px solid var(--border2);background:var(--bg2);cursor:pointer;color:var(--text3);font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:2px}
+.check-btn.done{background:var(--green);border-color:var(--green);color:#fff}
+.phase-note{background:var(--bg2);border-left:2px solid var(--accent);border-radius:0 var(--r) var(--r) 0;padding:12px 16px;font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px}
+.field-group{margin-bottom:20px}
+.field-label{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--text2);text-transform:uppercase;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.field-val{font-size:24px;font-weight:500}
+.slider-row{display:flex;align-items:center;gap:10px}
+input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid var(--bg)}
+input[type=range].sym::-webkit-slider-thumb{background:var(--red)}
+input[type=range].er::-webkit-slider-thumb{background:var(--green)}
+input[type=range].st::-webkit-slider-thumb{background:var(--amber)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{padding:8px 14px;border-radius:20px;border:0.5px solid var(--border2);font-size:14px;cursor:pointer;color:var(--text2);background:var(--bg2);transition:all .15s;user-select:none}
+.chip.on{background:var(--bg3);color:var(--text);border-color:var(--accent)}
+textarea{width:100%;background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;padding:14px;resize:none;min-height:90px;outline:none;line-height:1.5}
+textarea:focus{border-color:var(--accent)}
+.save-btn{width:100%;padding:16px;border-radius:var(--r);border:none;background:var(--accent);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:17px;font-weight:500;cursor:pointer;margin-top:12px;transition:opacity .15s}
+.save-btn:active{opacity:.8}
+.sync-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+.sync-status{font-size:12px;font-family:'DM Mono',monospace}
+.sync-ok{color:var(--green)}
+.sync-err{color:var(--red)}
+.sync-pending{color:var(--text3)}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);padding:10px 20px;font-size:13px;color:var(--text);opacity:0;transition:opacity .3s;pointer-events:none;z-index:200;white-space:nowrap}
+.toast.show{opacity:1}
+.metric-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.metric{background:var(--bg2);border-radius:var(--r);padding:14px 10px;text-align:center;border:0.5px solid var(--border)}
+.metric-l{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px}
+.metric-v{font-size:28px;font-weight:500}
+.chart-wrap{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:20px;height:160px;position:relative}
+.entry-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px}
+.entry-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.entry-date-label{font-family:'DM Mono',monospace;font-size:13px;color:var(--text2)}
+.score-row{display:flex;gap:8px}
+.score-pill{font-family:'DM Mono',monospace;font-size:12px;padding:3px 8px;border-radius:4px}
+.score-pill.sym{background:rgba(212,97,74,0.15);color:var(--red)}
+.score-pill.er{background:rgba(90,158,122,0.15);color:var(--green)}
+.score-pill.st{background:rgba(196,154,58,0.15);color:var(--amber)}
+.entry-done{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.done-tag{font-size:11px;font-family:'DM Mono',monospace;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,0.05);color:var(--text3)}
+.entry-trigs{font-size:12px;color:var(--text3);margin-top:6px}
+.entry-note{font-size:13px;color:var(--text2);margin-top:6px;line-height:1.4}
+.sync-badge{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:6px;vertical-align:middle}
+.synced{background:var(--green)}
+.unsynced{background:var(--amber)}
+.section-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.empty{text-align:center;color:var(--text3);font-size:13px;padding:40px 0;font-family:'DM Mono',monospace}
+.action-btn{width:100%;padding:14px;border-radius:var(--r);border:0.5px solid var(--border2);background:var(--bg2);color:var(--text2);font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-bottom:10px;transition:all .15s;text-align:center}
+.action-btn:active{background:var(--bg3);color:var(--text)}
+.install-hint{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:16px;font-size:14px;color:var(--text2);line-height:1.6}
+.install-hint strong{color:var(--accent);font-weight:500}
 </style>
 </head>
 <body>
@@ -246,7 +148,6 @@ textarea:focus { border-color: var(--accent); }
         <span style="font-size:11px;color:var(--text3)">10</span>
       </div>
     </div>
-
     <div class="field-group">
       <div class="field-label">Sitzdauer</div>
       <div class="chips" id="sitChips">
@@ -256,7 +157,6 @@ textarea:focus { border-color: var(--accent); }
         <div class="chip" onclick="toggleChip(this,'sit')">über 6h</div>
       </div>
     </div>
-
     <div class="field-group">
       <div class="field-label">Auslöser</div>
       <div class="chips" id="trigChips">
@@ -271,361 +171,410 @@ textarea:focus { border-color: var(--accent); }
         <div class="chip" onclick="toggleChip(this,'trig')">Spontanremission</div>
       </div>
     </div>
-
     <div class="field-group">
       <div class="field-label">Notiz</div>
       <textarea id="noteText" placeholder="Beobachtungen, Besonderheiten..."></textarea>
     </div>
-
-    <button class="save-btn" onclick="saveEntry()">Speichern</button>
+    <button class="save-btn" onclick="saveEntry()">Speichern + Sync</button>
+    <div class="sync-row">
+      <span class="sync-status sync-pending" id="syncStatus">Noch nicht gespeichert</span>
+    </div>
   </div>
 
   <div id="sec-verlauf" class="section">
     <div class="metric-row" id="metricRow"></div>
     <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
-    <div class="section-title">Einträge</div>
+    <button class="action-btn" onclick="syncAll()">&#8635; Alle unsynced Einträge zu Google Sheets senden</button>
+    <button class="action-btn" onclick="exportCSV()">&#8659; Als CSV exportieren</button>
+    <div class="section-title" style="margin-top:10px">Einträge</div>
     <div id="entryList2"><div class="empty">Noch keine Einträge</div></div>
   </div>
 
   <div id="sec-info" class="section">
     <div class="install-hint">
       <strong>Als App speichern (iPhone):</strong><br>
-      Safari öffnen → Teilen-Symbol → "Zum Home-Bildschirm" → Hinzufügen.<br><br>
+      Safari → Teilen → "Zum Home-Bildschirm" → Hinzufügen<br><br>
       <strong>Als App speichern (Android):</strong><br>
-      Chrome öffnen → Menü (drei Punkte) → "Zum Startbildschirm hinzufügen".<br><br>
-      <strong>Daten:</strong> Alle Einträge werden lokal auf deinem Gerät gespeichert (localStorage). Niemand außer dir kann sie sehen.
+      Chrome → Menü → "Zum Startbildschirm hinzufügen"
     </div>
-    <div class="section-title">Über diese App</div>
     <div class="install-hint">
-      8-Wochen-Programm für CPPS / autonome Dysregulation.<br><br>
-      <strong>Phasen:</strong><br>
+      <strong>Daten:</strong> Lokal gespeichert + automatisch zu Google Sheets synchronisiert beim Speichern.<br><br>
+      <strong>Programm:</strong> 8 Wochen ab 26.03.2026<br>
       Wo. 1–2: Beruhigen · Wo. 3–4: Modulieren<br>
       Wo. 5–6: Stabilisieren · Wo. 7–8: Integrieren<br><br>
-      <strong>Dokumentiere täglich</strong> für deinen Arzttermin:<br>
-      Symptome (0–10) · Erektionsfunktion (0–10) · Stress (0–10) · Auslöser
+      <strong>Stopp-Regel:</strong> Symptome nach Einheit >24h schlechter → Intensität halbieren
     </div>
   </div>
 </div>
 
 <nav class="bottom-nav">
-  <button class="nav-item active" onclick="showSection('heute',this)">
-    <span class="nav-icon">&#9634;</span>Heute
-  </button>
-  <button class="nav-item" onclick="showSection('eintrag',this)">
-    <span class="nav-icon">&#9998;</span>Eintrag
-  </button>
-  <button class="nav-item" onclick="showSection('verlauf',this)">
-    <span class="nav-icon">&#9636;</span>Verlauf
-  </button>
-  <button class="nav-item" onclick="showSection('info',this)">
-    <span class="nav-icon">&#9432;</span>Info
-  </button>
+  <button class="nav-item active" onclick="showSection('heute',this)"><span class="nav-icon">&#9634;</span>Heute</button>
+  <button class="nav-item" onclick="showSection('eintrag',this)"><span class="nav-icon">&#9998;</span>Eintrag</button>
+  <button class="nav-item" onclick="showSection('verlauf',this)"><span class="nav-icon">&#9636;</span>Verlauf</button>
+  <button class="nav-item" onclick="showSection('info',this)"><span class="nav-icon">&#9432;</span>Info</button>
 </nav>
 
-<div class="toast" id="toast">Gespeichert ✓</div>
+<div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-const SKEY = 'cpps_diary_v2';
-const DKEY = 'cpps_done_v2';
-const START = new Date('2026-03-26');
+const SKEY='cpps_diary_v2', DKEY='cpps_done_v2';
+const START=new Date('2026-03-26');
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbxYLKjK0AK_oKkNWYuPtKqGMiUmTlWibcchrbdUtDTw50bD8iL84WLtCCUYub1IiS85/exec';
 
-const phases = [
+const DAILY_MORNING=[
+  {c:'#7a6eb8',n:'Kaltes Gesicht (Tauchreflex)',d:'3× Gesicht 20 Sek. in kaltes Wasser',t:'Stärkster nicht-invasiver Vagusreiz – Herzrate sinkt messbar.',daily:true}
+];
+const DAILY_ANY=[
+  {c:'#7a6eb8',n:'Resonanzatmung',d:'5 Min – 5 Sek. ein, 5 Sek. aus',t:'HRV-Training. Baut sich über Wochen auf.',daily:true}
+];
+const DAILY_EVENING=[
+  {c:'#7a6eb8',n:'Physiologisches Seufzen',d:'2 Min',t:'Doppeleinatemzug durch die Nase, langer Ausatem durch den Mund.',daily:true},
+  {c:'#5a5650',n:'Bodyscan + Beckenboden loslassen',d:'8–10 Min liegend',t:'Beckenboden bewusst mit jedem Ausatem loslassen.',daily:true}
+];
+
+const phases=[
   {label:'Phase 1 · Wo. 1–2',sub:'Beruhigen',note:'Kein Pushing – nur sanfte Signale. Intensität ist der Feind. Ziel: Sicherheit signalisieren.',
-   days:[
-    {n:'Mo',t:'Regulation',ex:[
-      {c:'#7a6eb8',n:'Physiologisches Seufzen',d:'2×2 Min morgens + abends',t:'Doppeleinatemzug durch die Nase, langer Ausatem durch den Mund – stärkster akuter Vagusreiz'},
-      {c:'#3a8a78',n:'Sanfter Gluteus-Druck (Ball)',d:'2×45 Sek. pro Seite',t:'Statischer Druck, kein Rollen. Kein Schmerz – nur Schwere'},
-      {c:'#5a5650',n:'Bodyscan liegend',d:'10 Min',t:'Beckenboden bewusst loslassen mit jedem Ausatem'}
-    ]},
-    {n:'Di',t:'Nerv + Faszie',ex:[
-      {c:'#c49a3a',n:'Slump Nerve Glide',d:'2×8 Wdh., sehr langsam',t:'Kein Brennen während der Übung. Bei Reiz sofort stoppen'},
+   week:[
+    {ex:[]},
+    {ex:[
+      {c:'#c49a3a',n:'Slump Nerve Glide',d:'2×8 Wdh., sehr langsam',t:'Kein Brennen. Bei Reiz sofort stoppen.'},
       {c:'#3a8a78',n:'Foam Roller Gluteus',d:'2 Min pro Seite',t:'Langsam, ohne Schmerz. Verweilen auf Druckpunkten 30 Sek.'}
     ]},
-    {n:'Mi',t:'Ruhetag',ex:[
-      {c:'#5a5650',n:'Spaziergang (flach, langsam)',d:'15–20 Min',t:'Aufmerksamkeit auf Umgebung – nicht auf Körper'},
-      {c:'#7a6eb8',n:'Atemübung 4-7-8',d:'3 Zyklen abends',t:'Einatmen 4s, halten 7s, ausatmen 8s'}
+    {ex:[
+      {c:'#3a8a78',n:'Gluteus-Ball (statisch)',d:'2×45 Sek. pro Seite',t:'Statischer Druck, kein Rollen. Kein Schmerz.'},
+      {c:'#3a8a78',n:'Piriformis-Dehnung (Figure-4)',d:'2×60 Sek. pro Seite',t:'Ohne Zug – nur Schwerkraft. Auf Ausatem loslassen.'}
     ]},
-    {n:'Do',t:'Regulation',ex:[
-      {c:'#7a6eb8',n:'Physiologisches Seufzen',d:'2×2 Min',t:'Wie Montag'},
-      {c:'#3a8a78',n:'Piriformis-Dehnung (Figure-4)',d:'2×60 Sek. pro Seite',t:'Ohne Zug – nur Schwerkraft. Auf Ausatem loslassen'},
-      {c:'#5a5650',n:'Progressives Loslassen',d:'10 Min',t:'Jeden Muskel anspannen und vollständig loslassen – Fokus Beckenboden'}
+    {ex:[]},
+    {ex:[
+      {c:'#c49a3a',n:'Slump Nerve Glide',d:'2×8 Wdh.',t:'Gleiche Dosierung wie Di.'},
+      {c:'#3a8a78',n:'Adduktoren-Dehnung (Butterfly)',d:'2×60 Sek.',t:'Sanft, ohne Druck.'}
     ]},
-    {n:'Fr',t:'Nerv + Faszie',ex:[
-      {c:'#c49a3a',n:'Slump Nerve Glide',d:'2×8 Wdh.',t:'Gleiche Dosierung wie Di'},
-      {c:'#3a8a78',n:'Adduktoren-Dehnung (Butterfly)',d:'2×60 Sek.',t:'Sanft, ohne Druck'}
+    {ex:[
+      {c:'#3a8a78',n:'Ganzkörper Foam Roller',d:'20 Min',t:'Waden → Hamstrings → Gluteus → Thorakal. Kein LWS-Rollen.'}
     ]},
-    {n:'Sa',t:'Faszie Ganzkörper',ex:[
-      {c:'#3a8a78',n:'Foam Roller Rücken (thorakal)',d:'3 Min',t:'Vagus-Mobilisation über thorakale Faszien'},
-      {c:'#3a8a78',n:'Foam Roller Hamstrings',d:'2 Min pro Seite',t:'Sanft, pausieren bei Druckpunkten'},
-      {c:'#5a5650',n:'Gehmeditation',d:'10 Min draußen',t:'Aufmerksamkeit nach außen'}
-    ]},
-    {n:'So',t:'Vollruhe',ex:[
-      {c:'#5a5650',n:'Keine aktive Übung',d:'–',t:'Bewusstes Nichtstun – das Nervensystem braucht ungestörte Erholung'}
-    ]}
+    {ex:[]}
   ]},
   {label:'Phase 2 · Wo. 3–4',sub:'Modulieren',note:'Erste dosierte Intensivierung – nur wenn Phase 1 keine Verschlechterung gebracht hat.',
-   days:[
-    {n:'Mo',t:'Regulation + Vagus',ex:[
-      {c:'#7a6eb8',n:'Kaltes Gesicht (Tauchreflex)',d:'3× Gesicht 20 Sek. in kaltes Wasser',t:'Stärkster nicht-invasiver Vagusreiz – Herzrate sinkt messbar'},
-      {c:'#7a6eb8',n:'Humming / Summen',d:'5 Min',t:'Vagusnerv-Stimulation über Vibration'},
-      {c:'#5a5650',n:'Bodyscan',d:'10 Min',t:'Wie Phase 1'}
+   week:[
+    {ex:[
+      {c:'#7a6eb8',n:'Humming / Summen',d:'5 Min',t:'Vagusnerv-Stimulation über Vibration.'}
     ]},
-    {n:'Di',t:'Nerv + Faszie',ex:[
-      {c:'#c49a3a',n:'Slump Nerve Glide',d:'3×10 Wdh.',t:'Leichte Steigerung. Pause 2 Min zwischen Sätzen'},
-      {c:'#3a8a78',n:'Ball Gluteus (intensiver)',d:'2×60 Sek. pro Seite',t:'Etwas mehr Körpergewicht – aber kein Schmerz'}
+    {ex:[
+      {c:'#c49a3a',n:'Slump Nerve Glide',d:'3×10 Wdh.',t:'Leichte Steigerung. Pause 2 Min zwischen Sätzen.'},
+      {c:'#3a8a78',n:'Ball Gluteus (mehr Gewicht)',d:'2×60 Sek. pro Seite',t:'Etwas mehr Körpergewicht – aber kein Schmerz.'}
     ]},
-    {n:'Mi',t:'Ganzkörper Faszien',ex:[
-      {c:'#3a8a78',n:'Foam Roller Iliopsoas',d:'90 Sek. pro Seite',t:'Hüftbeuger – verändert Beckenkippung'},
-      {c:'#3a8a78',n:'Foam Roller Wade + Fuß',d:'2 Min pro Seite',t:'Fasziale Kette von unten'},
-      {c:'#5a5650',n:'Spaziergang',d:'20 Min',t:''}
+    {ex:[
+      {c:'#3a8a78',n:'Foam Roller Iliopsoas',d:'90 Sek. pro Seite',t:'Hüftbeuger – verändert Beckenkippung.'},
+      {c:'#3a8a78',n:'Piriformis + Adduktoren',d:'Je 60 Sek.',t:'Myofasziale Kette als Einheit.'}
     ]},
-    {n:'Do',t:'Regulation',ex:[
-      {c:'#7a6eb8',n:'Kaltes Gesicht',d:'3× morgens',t:'Wie Montag'},
-      {c:'#7a6eb8',n:'Box Breathing',d:'5 Min',t:'4s ein, 4s halten, 4s aus, 4s halten – HRV-Training'},
-      {c:'#5a5650',n:'Figure-4 Dehnung',d:'2×90 Sek.',t:'Länger als Phase 1'}
+    {ex:[
+      {c:'#7a6eb8',n:'Box Breathing',d:'5 Min',t:'4s ein, 4s halten, 4s aus, 4s halten.'}
     ]},
-    {n:'Fr',t:'Nerv + Faszie',ex:[
-      {c:'#c49a3a',n:'Sciatic Nerve Floss',d:'2×8 Wdh. pro Seite',t:'Abwechselndes Spannen/Entspannen – sanfter als Slump'},
-      {c:'#3a8a78',n:'Adduktoren + Piriformis',d:'Je 60 Sek.',t:'Myofasziale Kette als Einheit behandeln'}
+    {ex:[
+      {c:'#c49a3a',n:'Sciatic Nerve Floss',d:'2×8 Wdh. pro Seite',t:'Abwechselndes Spannen/Entspannen – sanfter als Slump.'},
+      {c:'#3a8a78',n:'Gluteus + Piriformis Ball',d:'Je 60 Sek.',t:''}
     ]},
-    {n:'Sa',t:'Intensivtag Faszien',ex:[
-      {c:'#3a8a78',n:'Ganzkörper Foam Roller',d:'20 Min',t:'Waden → Hamstrings → Gluteus → Rücken. Kein LWS-Rollen'},
-      {c:'#3a8a78',n:'Triggerpunkt Ball (Gluteus med.)',d:'2×45 Sek. pro Seite',t:'Gluteus medius – myofasziale Verbindung zum Beckenboden'}
+    {ex:[
+      {c:'#3a8a78',n:'Ganzkörper Foam Roller',d:'20 Min',t:'Waden → Hamstrings → Gluteus → Thorakal.'},
+      {c:'#3a8a78',n:'Triggerpunkt Ball (Gluteus med.)',d:'2×45 Sek. pro Seite',t:'Myofasziale Verbindung zum Beckenboden.'}
     ]},
-    {n:'So',t:'Aktive Ruhe',ex:[
-      {c:'#5a5650',n:'Spaziergang Natur',d:'30 Min',t:'Eustress-Signal: Aufmerksamkeit nach außen'},
-      {c:'#7a6eb8',n:'Abendatemübung 4-7-8',d:'5 Min',t:''}
-    ]}
+    {ex:[]}
   ]},
   {label:'Phase 3 · Wo. 5–6',sub:'Stabilisieren',note:'Erste körperliche Intensivierung. Schwimmen oder Radfahren testen – nur wenn Phase 2 gut toleriert.',
-   days:[
-    {n:'Mo',t:'Regulation + Bewegung',ex:[
-      {c:'#7a6eb8',n:'Kaltes Gesicht + Summen',d:'Je 5 Min morgens',t:'Jetzt täglich – auch an trainingsfreien Tagen'},
-      {c:'#5a5650',n:'Schwimmen testen',d:'20 Min, Rücken oder langsam Kraul',t:'Kein Brustschwimmen. Nur wenn kein Druck danach'}
+   week:[
+    {ex:[
+      {c:'#5a5650',n:'Schwimmen testen',d:'20 Min, Rücken oder langsam Kraul',t:'Kein Brustschwimmen. Nur wenn kein Druck danach.'}
     ]},
-    {n:'Di',t:'Nerv + Faszie',ex:[
-      {c:'#c49a3a',n:'Slump + Sciatic Nerve Floss',d:'Je 3×10 Wdh.',t:'Kombination beider Techniken – abwechselnd'},
+    {ex:[
+      {c:'#c49a3a',n:'Slump + Sciatic Nerve Floss',d:'Je 3×10 Wdh.',t:'Kombination beider Techniken – abwechselnd.'},
       {c:'#3a8a78',n:'Ball Gluteus + Piriformis',d:'Je 60–90 Sek.',t:''}
     ]},
-    {n:'Mi',t:'Körperliche Erschöpfung',ex:[
-      {c:'#5a5650',n:'Radfahren (flach, entspannt)',d:'25–35 Min',t:'Breiter Sattel, aufrechte Position. Bei Symptomen abbrechen'},
-      {c:'#3a8a78',n:'Foam Roller Sequenz',d:'10 Min nach Sport',t:'Gewebepflege nach Belastung'}
+    {ex:[
+      {c:'#5a5650',n:'Radfahren (flach, entspannt)',d:'25–35 Min',t:'Breiter Sattel, aufrechte Position. Bei Symptomen abbrechen.'},
+      {c:'#3a8a78',n:'Foam Roller nach Sport',d:'10 Min',t:'Gewebepflege nach Belastung.'}
     ]},
-    {n:'Do',t:'Regulation',ex:[
-      {c:'#7a6eb8',n:'HRV-Atemübung',d:'10 Min (6 Atemzüge/Min)',t:'5s ein, 5s aus – stärkster HRV-Effekt'},
-      {c:'#5a5650',n:'Figure-4 + Adduktoren',d:'Je 2×90 Sek.',t:''}
+    {ex:[]},
+    {ex:[
+      {c:'#c49a3a',n:'Nerve Glides Kombination',d:'20 Min',t:'Slump + Sciatic Floss + Piriformis Nerve Release.'},
+      {c:'#3a8a78',n:'Iliopsoas Triggerpunkt',d:'90 Sek. pro Seite',t:'Ball in Hüftbeuge, sanft einsinken.'}
     ]},
-    {n:'Fr',t:'Nerv + Faszien',ex:[
-      {c:'#c49a3a',n:'Nerve Glides Kombination',d:'20 Min',t:'Slump + Sciatic Floss + Piriformis Nerve Release'},
-      {c:'#3a8a78',n:'Iliopsoas Triggerpunkt',d:'90 Sek. pro Seite',t:'Ball in Hüftbeuge, sanft einsinken lassen'}
+    {ex:[
+      {c:'#5a5650',n:'Schwimmen oder Radfahren',d:'30–40 Min',t:'Mit Freude – Eustress erzeugen.'},
+      {c:'#3a8a78',n:'Ganzkörper Foam Roller',d:'20 Min',t:''}
     ]},
-    {n:'Sa',t:'Eustress-Training',ex:[
-      {c:'#5a5650',n:'Schwimmen oder Radfahren',d:'30–40 Min',t:'Mit Freude – Eustress erzeugen, nicht Distress'},
-      {c:'#7a6eb8',n:'Post-Sport Atemübung',d:'5 Min 4-7-8',t:'Unmittelbar danach – Parasympathikus aktivieren'}
-    ]},
-    {n:'So',t:'Vollruhe',ex:[
-      {c:'#5a5650',n:'Keine Übung',d:'–',t:'Bewusstes Ausruhen als aktive Praxis'}
-    ]}
+    {ex:[]}
   ]},
   {label:'Phase 4 · Wo. 7–8',sub:'Integrieren',note:'Routine wird zur Gewohnheit. Tagebuch auswerten – alles dokumentieren für den Arzttermin.',
-   days:[
-    {n:'Mo',t:'Tägliche Basis',ex:[
-      {c:'#7a6eb8',n:'Morgensignal-Routine',d:'10 Min',t:'Kaltes Gesicht + 5 Min Resonanzatmung + 2 Min Summen'},
-      {c:'#5a5650',n:'Bodyscan abends',d:'10 Min',t:'Beckenboden auf Spannung prüfen und loslassen'}
+   week:[
+    {ex:[
+      {c:'#7a6eb8',n:'Humming / Summen',d:'5 Min extra',t:'Zusätzlich zur täglichen Routine.'}
     ]},
-    {n:'Di',t:'Nerv + Faszie',ex:[
-      {c:'#c49a3a',n:'Vollständige Nerve Glide Sequenz',d:'25 Min',t:'Alle drei Techniken'},
-      {c:'#3a8a78',n:'Ganzkörper Faszien',d:'30 Min',t:'Volle Sequenz aus Phase 2'}
+    {ex:[
+      {c:'#c49a3a',n:'Vollständige Nerve Glide Sequenz',d:'25 Min',t:'Alle drei Techniken.'},
+      {c:'#3a8a78',n:'Ganzkörper Faszien',d:'30 Min',t:'Volle Sequenz aus Phase 2.'}
     ]},
-    {n:'Mi',t:'Eustress-Sport',ex:[
-      {c:'#5a5650',n:'Bevorzugte Sportart',d:'35–45 Min',t:'Was am besten toleriert wird – mit Freude, nicht Pflicht'}
+    {ex:[
+      {c:'#5a5650',n:'Bevorzugte Sportart',d:'35–45 Min',t:'Was am besten toleriert wird.'},
+      {c:'#3a8a78',n:'Foam Roller nach Sport',d:'15 Min',t:''}
     ]},
-    {n:'Do',t:'Regulation',ex:[
-      {c:'#7a6eb8',n:'Resonanzatmung',d:'10 Min',t:'5s ein, 5s aus'},
-      {c:'#5a5650',n:'Alle Dehnungen Sequenz',d:'20 Min',t:'Piriformis + Adduktoren + Figure-4 in einer Runde'}
-    ]},
-    {n:'Fr',t:'Nerv + Faszie',ex:[
+    {ex:[]},
+    {ex:[
       {c:'#c49a3a',n:'Nerve Glides',d:'Wie Di',t:''},
       {c:'#3a8a78',n:'Triggerpunkt Ball (Gluteus med.)',d:'2×90 Sek.',t:''}
     ]},
-    {n:'Sa',t:'Eustress + Faszie',ex:[
-      {c:'#5a5650',n:'Längere Sporteinheit',d:'45–60 Min',t:'Bei Verschlechterung zurück zu Phase 3'},
-      {c:'#3a8a78',n:'Foam Roller Sequenz',d:'15 Min nach Sport',t:''}
+    {ex:[
+      {c:'#5a5650',n:'Längere Sporteinheit',d:'45–60 Min',t:'Bei Verschlechterung zurück zu Phase 3.'},
+      {c:'#3a8a78',n:'Foam Roller',d:'15 Min',t:''}
     ]},
-    {n:'So',t:'Reflexionstag',ex:[
-      {c:'#5a5650',n:'Symptomtagebuch auswerten',d:'20 Min',t:'Muster notieren für den Arzttermin'},
-      {c:'#7a6eb8',n:'Atemübung + Bodyscan',d:'15 Min',t:''}
+    {ex:[
+      {c:'#5a5650',n:'Symptomtagebuch auswerten',d:'20 Min',t:'Muster notieren für den Arzttermin.'}
     ]}
   ]}
 ];
 
-let dayOffset = 0;
-let chart = null;
+let dayOffset=0,chart=null;
+function getDate(){const d=new Date();d.setDate(d.getDate()+dayOffset);return d}
+function dateKey(d){return d.toISOString().slice(0,10)}
+function getDOW(d){return(d.getDay()+6)%7}
+function getPhaseIdx(d){const diff=Math.floor((d-START)/864e5);const w=Math.max(0,Math.floor(diff/7));return Math.min(Math.floor(w/2),3)}
+function load(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch(e){return{}}}
+function save(k,d){try{localStorage.setItem(k,JSON.stringify(d))}catch(e){}}
 
-function getDate() {
-  const d = new Date(); d.setDate(d.getDate() + dayOffset); return d;
-}
-function dateKey(d) { return d.toISOString().slice(0,10); }
-function getDOW(d) { return (d.getDay()+6)%7; }
-function getPhase(d) {
-  const diff = Math.floor((d - START)/(864e5));
-  const week = Math.max(0, Math.floor(diff/7));
-  return Math.min(Math.floor(week/2), 3);
-}
-function load(key) { try { return JSON.parse(localStorage.getItem(key)||'{}'); } catch(e){ return {}; } }
-function save(key, data) { try { localStorage.setItem(key, JSON.stringify(data)); } catch(e){} }
+const MONTHS=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const DOWLONG=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const DOWSHORT=['So','Mo','Di','Mi','Do','Fr','Sa'];
 
-function updateSlider(el, cls, valId) {
-  const v = parseInt(el.value);
-  const pct = (v/10*100)+'%';
-  el.style.setProperty('--pct', pct);
-  el.style.background = `linear-gradient(to right, var(--${cls==='sym'?'red':cls==='er'?'green':'amber'}) 0%, var(--${cls==='sym'?'red':cls==='er'?'green':'amber'}) ${pct}, var(--bg3) ${pct})`;
-  document.getElementById(valId).textContent = v;
+function showToast(msg,duration=2500){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),duration);
 }
 
-function initSliders() {
-  ['sym','er','st'].forEach(c => {
-    const el = document.getElementById(c+'Slider');
-    updateSlider(el, c, c+'Val');
-  });
+function updateSlider(el,cls,valId){
+  const v=parseInt(el.value),pct=(v/10*100)+'%';
+  const col=cls==='sym'?'var(--red)':cls==='er'?'var(--green)':'var(--amber)';
+  el.style.background=`linear-gradient(to right,${col} 0%,${col} ${pct},var(--bg3) ${pct})`;
+  document.getElementById(valId).textContent=v;
 }
+function initSliders(){['sym','er','st'].forEach(c=>updateSlider(document.getElementById(c+'Slider'),c,c+'Val'))}
 
-function toggleChip(el, group) {
-  if(group==='sit') document.querySelectorAll('#sitChips .chip').forEach(c=>c.classList.remove('on'));
+function toggleChip(el,group){
+  if(group==='sit')document.querySelectorAll('#sitChips .chip').forEach(c=>c.classList.remove('on'));
   el.classList.toggle('on');
 }
 
-function showSection(name, btn) {
+function showSection(name,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('visible'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('sec-'+name).classList.add('visible');
   btn.classList.add('active');
-  if(name==='verlauf') renderVerlauf();
-  if(name==='eintrag') updateEntryHeader();
+  if(name==='verlauf')renderVerlauf();
+  if(name==='eintrag')loadEntryForDay();
 }
 
-function changeDay(d) {
-  dayOffset += d;
-  renderHeader();
-  renderToday();
-  updateEntryHeader();
+function changeDay(d){dayOffset+=d;renderHeader();renderToday()}
+
+function renderHeader(){
+  const d=getDate();
+  document.getElementById('headerDate').textContent=d.getDate()+'. '+MONTHS[d.getMonth()];
+  document.getElementById('headerDay').textContent=DOWLONG[d.getDay()];
+  document.getElementById('phasePill').textContent=phases[getPhaseIdx(d)].label;
 }
 
-function renderHeader() {
-  const d = getDate();
-  const days = ['So','Mo','Di','Mi','Do','Fr','Sa'];
-  const months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-  const dow = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
-  document.getElementById('headerDate').textContent = d.getDate()+'. '+months[d.getMonth()];
-  document.getElementById('headerDay').textContent = dow[d.getDay()];
-  const pi = getPhase(d);
-  document.getElementById('phasePill').textContent = phases[pi].label;
+function buildExKey(slot,idx){return slot+'_'+idx}
+
+function renderToday(){
+  const d=getDate();
+  const pi=getPhaseIdx(d);
+  const di=getDOW(d);
+  const phase=phases[pi];
+  const specific=phase.week[di].ex;
+  document.getElementById('phaseNote').textContent=phase.note;
+  const done=load(DKEY);
+  const key=dateKey(d);
+  if(!done[key])done[key]={};
+  let html='';
+  html+=renderTimeBlock('Morgens','morning',DAILY_MORNING,done[key],key);
+  const anyItems=[...DAILY_ANY,...specific];
+  html+=renderTimeBlock('Tagsüber','any',anyItems,done[key],key);
+  html+=renderTimeBlock('Abends','evening',DAILY_EVENING,done[key],key);
+  document.getElementById('exList').innerHTML=html;
 }
 
-function renderToday() {
-  const d = getDate();
-  const pi = getPhase(d);
-  const di = getDOW(d);
-  const phase = phases[pi];
-  const day = phase.days[di];
-  document.getElementById('phaseNote').textContent = phase.note;
-  const done = load(DKEY);
-  const key = dateKey(d);
-  if(!done[key]) done[key]={};
-  document.getElementById('exList').innerHTML = day.ex.map((ex,i)=>`
-    <div class="ex-item">
-      <div class="ex-dot" style="background:${ex.c}"></div>
+function renderTimeBlock(label,slot,items,doneMap,datekey){
+  if(!items.length)return'';
+  let html=`<div class="time-block"><div class="time-label">${label}</div>`;
+  items.forEach((ex,i)=>{
+    const k=buildExKey(slot,i);
+    const isDone=!!doneMap[k];
+    html+=`<div class="ex-item">
+      <div class="ex-left">
+        <div class="ex-dot" style="background:${ex.c}"></div>
+        <span class="tag-pill ${ex.daily?'tag-daily':'tag-specific'}">${ex.daily?'tägl':'heute'}</span>
+      </div>
       <div class="ex-body">
         <div class="ex-name">${ex.n}</div>
         <div class="ex-dose">${ex.d}</div>
         ${ex.t?`<div class="ex-note">${ex.t}</div>`:''}
       </div>
-      <button class="check-btn ${done[key][i]?'done':''}" onclick="toggleDone('${key}',${i},this)">${done[key][i]?'&#10003;':''}</button>
-    </div>
-  `).join('');
+      <button class="check-btn ${isDone?'done':''}" onclick="toggleDone('${datekey}','${k}',this)">${isDone?'&#10003;':''}</button>
+    </div>`;
+  });
+  return html+'</div>';
 }
 
-function toggleDone(key, i, btn) {
-  const done = load(DKEY);
-  if(!done[key]) done[key]={};
-  done[key][i] = !done[key][i];
-  save(DKEY, done);
-  btn.classList.toggle('done', done[key][i]);
-  btn.innerHTML = done[key][i] ? '&#10003;' : '';
+function toggleDone(datekey,exkey,btn){
+  const done=load(DKEY);
+  if(!done[datekey])done[datekey]={};
+  done[datekey][exkey]=!done[datekey][exkey];
+  save(DKEY,done);
+  btn.classList.toggle('done',done[datekey][exkey]);
+  btn.innerHTML=done[datekey][exkey]?'&#10003;':'';
 }
 
-function updateEntryHeader() {
-  const d = getDate();
-  const dow = ['So','Mo','Di','Mi','Do','Fr','Sa'];
-  const months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-  const existing = load(SKEY)[dateKey(d)];
-  if(existing) {
-    document.getElementById('symSlider').value = existing.sym;
-    document.getElementById('erSlider').value = existing.er;
-    document.getElementById('stSlider').value = existing.st;
-    ['sym','er','st'].forEach(c => updateSlider(document.getElementById(c+'Slider'),c,c+'Val'));
-    document.getElementById('noteText').value = existing.note||'';
-    document.querySelectorAll('#sitChips .chip').forEach(c=>{c.classList.toggle('on',c.textContent===existing.sit)});
-    document.querySelectorAll('#trigChips .chip').forEach(c=>{c.classList.toggle('on',(existing.trigs||[]).includes(c.textContent))});
-  } else {
+function getDoneNames(datekey){
+  const done=load(DKEY)[datekey]||{};
+  const d=new Date(datekey+'T12:00:00');
+  const pi=getPhaseIdx(d);
+  const di=getDOW(d);
+  const specific=phases[pi].week[di].ex;
+  const allEx={};
+  DAILY_MORNING.forEach((ex,i)=>allEx['morning_'+i]=ex.n);
+  [...DAILY_ANY,...specific].forEach((ex,i)=>allEx['any_'+i]=ex.n);
+  DAILY_EVENING.forEach((ex,i)=>allEx['evening_'+i]=ex.n);
+  return Object.entries(done).filter(([k,v])=>v&&allEx[k]).map(([k])=>allEx[k]);
+}
+
+function loadEntryForDay(){
+  const d=getDate();
+  const key=dateKey(d);
+  const existing=load(SKEY)[key];
+  const ss=document.getElementById('syncStatus');
+  if(existing){
+    document.getElementById('symSlider').value=existing.sym;
+    document.getElementById('erSlider').value=existing.er;
+    document.getElementById('stSlider').value=existing.st;
+    initSliders();
+    document.getElementById('noteText').value=existing.note||'';
+    document.querySelectorAll('#sitChips .chip').forEach(c=>c.classList.toggle('on',c.textContent===existing.sit));
+    document.querySelectorAll('#trigChips .chip').forEach(c=>c.classList.toggle('on',(existing.trigs||[]).includes(c.textContent)));
+    ss.className='sync-status '+(existing.synced?'sync-ok':'sync-pending');
+    ss.textContent=existing.synced?'Synced mit Google Sheets':'Lokal gespeichert – noch nicht gesynct';
+  }else{
     document.getElementById('symSlider').value=5;
     document.getElementById('erSlider').value=5;
     document.getElementById('stSlider').value=5;
-    ['sym','er','st'].forEach(c=>updateSlider(document.getElementById(c+'Slider'),c,c+'Val'));
+    initSliders();
     document.getElementById('noteText').value='';
-    document.querySelectorAll('#sitChips .chip, #trigChips .chip').forEach(c=>c.classList.remove('on'));
+    document.querySelectorAll('#sitChips .chip,#trigChips .chip').forEach(c=>c.classList.remove('on'));
+    ss.className='sync-status sync-pending';
+    ss.textContent='Noch kein Eintrag für diesen Tag';
   }
 }
 
-function saveEntry() {
-  const data = load(SKEY);
-  const key = dateKey(getDate());
-  data[key] = {
-    sym: parseInt(document.getElementById('symSlider').value),
-    er: parseInt(document.getElementById('erSlider').value),
-    st: parseInt(document.getElementById('stSlider').value),
-    sit: [...document.querySelectorAll('#sitChips .chip.on')].map(c=>c.textContent).join(''),
-    trigs: [...document.querySelectorAll('#trigChips .chip.on')].map(c=>c.textContent),
-    note: document.getElementById('noteText').value,
-    ts: Date.now()
+async function syncToSheets(key,entry){
+  const d=new Date(key+'T12:00:00');
+  const doneNames=getDoneNames(key);
+  const payload={
+    datum:key,
+    wochentag:DOWLONG[d.getDay()],
+    phase:phases[getPhaseIdx(d)].label,
+    symptome:entry.sym,
+    erektion:entry.er,
+    stress:entry.st,
+    sitzdauer:entry.sit||'',
+    ausloser:(entry.trigs||[]).join('; '),
+    erledigt:doneNames.join('; '),
+    notiz:(entry.note||'').replace(/\n/g,' '),
+    timestamp:new Date().toLocaleString('de-DE')
   };
-  save(SKEY, data);
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2000);
+  const resp=await fetch(SHEETS_URL,{
+    method:'POST',
+    body:JSON.stringify(payload)
+  });
+  const json=await resp.json();
+  return json.status==='ok'||json.status==='updated';
 }
 
-function renderVerlauf() {
-  const data = load(SKEY);
-  const keys = Object.keys(data).sort();
-  const metricsEl = document.getElementById('metricRow');
-  if(!keys.length) {
-    metricsEl.innerHTML='';
+async function saveEntry(){
+  const data=load(SKEY);
+  const key=dateKey(getDate());
+  const entry={
+    sym:parseInt(document.getElementById('symSlider').value),
+    er:parseInt(document.getElementById('erSlider').value),
+    st:parseInt(document.getElementById('stSlider').value),
+    sit:[...document.querySelectorAll('#sitChips .chip.on')].map(c=>c.textContent).join(''),
+    trigs:[...document.querySelectorAll('#trigChips .chip.on')].map(c=>c.textContent),
+    note:document.getElementById('noteText').value,
+    ts:Date.now(),
+    synced:false
+  };
+  data[key]=entry;
+  save(SKEY,data);
+  const ss=document.getElementById('syncStatus');
+  ss.className='sync-status sync-pending';
+  ss.textContent='Wird gesynct...';
+  showToast('Lokal gespeichert ✓');
+  try{
+    const ok=await syncToSheets(key,entry);
+    if(ok){
+      data[key].synced=true;
+      save(SKEY,data);
+      ss.className='sync-status sync-ok';
+      ss.textContent='Synced mit Google Sheets ✓';
+      showToast('Google Sheets aktualisiert ✓');
+    }else{
+      ss.className='sync-status sync-err';
+      ss.textContent='Sync fehlgeschlagen – lokal gespeichert';
+    }
+  }catch(e){
+    ss.className='sync-status sync-err';
+    ss.textContent='Kein Internet – lokal gespeichert';
+  }
+}
+
+async function syncAll(){
+  const data=load(SKEY);
+  const unsynced=Object.entries(data).filter(([k,v])=>!v.synced);
+  if(!unsynced.length){showToast('Alle Einträge bereits gesynct ✓');return;}
+  showToast(`Synce ${unsynced.length} Einträge...`,4000);
+  let ok=0;
+  for(const [key,entry] of unsynced){
+    try{
+      const success=await syncToSheets(key,entry);
+      if(success){data[key].synced=true;ok++;}
+    }catch(e){}
+  }
+  save(SKEY,data);
+  showToast(`${ok} von ${unsynced.length} Einträge gesynct ✓`);
+  renderVerlauf();
+}
+
+function renderVerlauf(){
+  const data=load(SKEY);
+  const keys=Object.keys(data).sort();
+  if(!keys.length){
+    document.getElementById('metricRow').innerHTML='';
     document.getElementById('entryList2').innerHTML='<div class="empty">Noch keine Einträge</div>';
     return;
   }
-  const avg = arr => (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1);
-  const syms=keys.map(k=>data[k].sym), ers=keys.map(k=>data[k].er), sts=keys.map(k=>data[k].st);
-  metricsEl.innerHTML=`
+  const avg=arr=>(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1);
+  const syms=keys.map(k=>data[k].sym),ers=keys.map(k=>data[k].er),sts=keys.map(k=>data[k].st);
+  document.getElementById('metricRow').innerHTML=`
     <div class="metric"><div class="metric-l">Ø Symptome</div><div class="metric-v" style="color:var(--red)">${avg(syms)}</div></div>
     <div class="metric"><div class="metric-l">Ø Erektion</div><div class="metric-v" style="color:var(--green)">${avg(ers)}</div></div>
-    <div class="metric"><div class="metric-l">Einträge</div><div class="metric-v">${keys.length}</div></div>
-  `;
-  const ctx = document.getElementById('trendChart').getContext('2d');
-  if(chart) chart.destroy();
-  chart = new Chart(ctx,{
-    type:'line',
-    data:{
-      labels: keys.map(k=>k.slice(5)),
-      datasets:[
-        {label:'Symptome',data:syms,borderColor:'#d4614a',backgroundColor:'transparent',pointRadius:2,tension:.3,borderWidth:1.5},
-        {label:'Erektion',data:ers,borderColor:'#5a9e7a',backgroundColor:'transparent',pointRadius:2,tension:.3,borderWidth:1.5},
-        {label:'Stress',data:sts,borderColor:'#c49a3a',backgroundColor:'transparent',pointRadius:2,tension:.3,borderWidth:1.5}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
+    <div class="metric"><div class="metric-l">Einträge</div><div class="metric-v">${keys.length}</div></div>`;
+  const ctx=document.getElementById('trendChart').getContext('2d');
+  if(chart)chart.destroy();
+  chart=new Chart(ctx,{type:'line',data:{
+    labels:keys.map(k=>k.slice(5)),
+    datasets:[
+      {label:'Symptome',data:syms,borderColor:'#d4614a',backgroundColor:'transparent',pointRadius:2,tension:.3,borderWidth:1.5},
+      {label:'Erektion',data:ers,borderColor:'#5a9e7a',backgroundColor:'transparent',pointRadius:2,tension:.3,borderWidth:1.5},
+      {label:'Stress',data:sts,borderColor:'#c49a3a',backgroundColor:'transparent',pointRadius:2,tension:.3,borderWidth:1.5}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{labels:{color:'#8a8680',font:{size:11},boxWidth:10}}},
       scales:{
         x:{ticks:{color:'#5a5650',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},
@@ -633,24 +582,49 @@ function renderVerlauf() {
       }
     }
   });
-  const months=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-  document.getElementById('entryList2').innerHTML = keys.slice().reverse().map(k=>{
-    const e=data[k]; const d=new Date(k);
-    const dow=['So','Mo','Di','Mi','Do','Fr','Sa'];
-    return `<div class="entry-card">
+  document.getElementById('entryList2').innerHTML=keys.slice().reverse().map(k=>{
+    const e=data[k];const d=new Date(k+'T12:00:00');
+    const doneNames=getDoneNames(k);
+    const syncDot=e.synced
+      ?'<span class="sync-badge synced" title="Gesynct"></span>'
+      :'<span class="sync-badge unsynced" title="Nicht gesynct"></span>';
+    return`<div class="entry-card">
       <div class="entry-header">
-        <div class="entry-date-label">${dow[d.getDay()]}, ${d.getDate()}. ${months[d.getMonth()]}</div>
+        <div class="entry-date-label">${DOWSHORT[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]}${syncDot}</div>
         <div class="score-row">
           <span class="score-pill sym">S:${e.sym}</span>
           <span class="score-pill er">E:${e.er}</span>
           <span class="score-pill st">St:${e.st}</span>
         </div>
       </div>
+      ${doneNames.length?`<div class="entry-done">${doneNames.map(n=>`<span class="done-tag">${n}</span>`).join('')}</div>`:''}
       ${e.sit?`<div class="entry-trigs">Sitzen: ${e.sit}</div>`:''}
       ${e.trigs&&e.trigs.length?`<div class="entry-trigs">${e.trigs.join(' · ')}</div>`:''}
       ${e.note?`<div class="entry-note">${e.note}</div>`:''}
     </div>`;
   }).join('');
+}
+
+function exportCSV(){
+  const diary=load(SKEY);
+  const keys=Object.keys(diary).sort();
+  if(!keys.length){showToast('Keine Einträge zum Exportieren');return;}
+  const rows=[['Datum','Wochentag','Phase','Symptome','Erektion','Stress','Sitzdauer','Auslöser','Erledigte Übungen','Notiz','Gesynct']];
+  keys.forEach(k=>{
+    const e=diary[k];const d=new Date(k+'T12:00:00');
+    const pi=getPhaseIdx(d);
+    rows.push([k,DOWLONG[d.getDay()],phases[pi].label,e.sym,e.er,e.st,
+      e.sit||'',(e.trigs||[]).join('; '),getDoneNames(k).join('; '),
+      (e.note||'').replace(/"/g,'""'),e.synced?'ja':'nein']);
+  });
+  const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='cpps-verlauf.csv';
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);URL.revokeObjectURL(url);
+  showToast('CSV exportiert ✓');
 }
 
 renderHeader();
