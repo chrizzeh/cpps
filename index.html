@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Routine">
+<meta name="theme-color" content="#111110">
+<title>CPPS Routine</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+:root{
+  --bg:#111110;
+  --bg2:#1c1c1a;
+  --bg3:#252523;
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.16);
+  --text:#f4f0eb;
+  --text2:#c8c4be;
+  --text3:#8a8780;
+  --accent:#d4b896;
+  --red:#e87060;
+  --green:#72c48a;
+  --blue:#6ab0e0;
+  --yellow:#d4b84a;
+  --evening:#72c48a;
+  --fasz:#c88060;
+  --r:12px
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden}
+.app{max-width:480px;margin:0 auto;padding-bottom:48px}
+
+/* HEADER */
+.header{padding:52px 20px 20px;border-bottom:0.5px solid var(--border)}
+.header-top{display:flex;justify-content:space-between;align-items:flex-end}
+.label-small{font-family:'DM Mono',monospace;font-size:10px;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.day-name{font-size:32px;font-weight:600;letter-spacing:-0.02em;line-height:1}
+.header-right{text-align:right}
+.date-str{font-family:'DM Mono',monospace;font-size:13px;color:var(--text3)}
+.day-counter{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);margin-top:3px}
+.day-nav{display:flex;align-items:center;gap:8px;margin-top:10px;justify-content:flex-end}
+.nav-btn{background:none;border:0.5px solid var(--border2);color:var(--text2);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.nav-btn:active{background:var(--bg3)}
+.progress-row{display:flex;gap:4px;margin-top:16px;align-items:center}
+.progress-bar{flex:1;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s}
+.progress-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);white-space:nowrap}
+
+/* INFO BANNER */
+.info-banner{margin:16px 20px 0;background:rgba(212,184,150,0.06);border:0.5px solid rgba(212,184,150,0.2);border-radius:10px;overflow:hidden}
+.focus-banner{margin:16px 20px 0;background:rgba(106,176,224,0.08);border:0.5px solid rgba(106,176,224,0.3);border-radius:10px;overflow:hidden}
+.focus-toggle{width:100%;background:none;border:none;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.focus-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);font-weight:500}
+.focus-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.focus-arrow{font-size:13px;color:var(--blue);transition:transform .2s}
+.focus-arrow.open{transform:rotate(180deg)}
+.focus-content{display:none;padding:0 16px 12px}
+.focus-content.open{display:block}
+.focus-group{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);margin:14px 0 4px;padding-top:10px;border-top:0.5px solid rgba(255,255,255,0.06)}
+.focus-group:first-child{border-top:none;padding-top:0}
+.info-toggle{width:100%;background:none;border:none;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.info-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent)}
+.info-arrow{font-size:13px;color:var(--accent);transition:transform .2s}
+.info-arrow.open{transform:rotate(180deg)}
+.info-content{display:none;padding:0 16px 14px}
+.info-content.open{display:block}
+.info-row{padding:9px 0;border-top:0.5px solid rgba(255,255,255,0.06)}
+.info-row-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+.info-row-text{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* TIME BLOCKS */
+.block{margin:0 20px 8px}
+.block-header{display:flex;align-items:center;gap:10px;padding:18px 0 10px}
+.block-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.block-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500}
+.block-line{flex:1;height:0.5px;background:var(--border)}
+.block-label.morgens{color:var(--blue)}
+.block-dot.morgens{background:var(--blue)}
+.block-label.tagsüber{color:var(--yellow)}
+.block-dot.tagsüber{background:var(--yellow)}
+.block-label.abends{color:var(--evening)}
+.block-dot.abends{background:var(--evening)}
+.block-label.faszien{color:var(--fasz)}
+.block-dot.faszien{background:var(--fasz)}
+
+/* FASZIEN COLLAPSIBLE */
+.fasz-toggle{width:100%;background:rgba(200,128,96,0.08);border:0.5px solid rgba(200,128,96,0.25);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:4px}
+.fasz-toggle-left{display:flex;align-items:center;gap:10px}
+.fasz-toggle-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--fasz)}
+.fasz-toggle-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.fasz-arrow{font-size:14px;color:var(--fasz);transition:transform .2s}
+.fasz-arrow.open{transform:rotate(180deg)}
+.fasz-content{display:none;border:0.5px solid rgba(200,128,96,0.15);border-radius:10px;overflow:hidden;margin-bottom:4px}
+.fasz-content.open{display:block}
+
+/* EXERCISE ITEMS */
+.ex-item{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:0.5px solid rgba(255,255,255,0.05)}
+.ex-item:last-child{border-bottom:none}
+.ex-left{display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:3px;flex-shrink:0;width:18px}
+.ex-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ex-body{flex:1;min-width:0}
+.ex-name{font-size:14px;font-weight:500;color:var(--text);line-height:1.3}
+.ex-dose{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);margin-top:2px}
+.ex-note{font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5}
+.ex-stop{font-size:11px;color:var(--red);margin-top:3px;font-style:italic}
+.new-phase{font-size:11px;color:var(--red);font-weight:600;margin-top:3px}
+.check-btn{width:36px;height:36px;border-radius:9px;flex-shrink:0;border:0.5px solid var(--border2);background:var(--bg2);cursor:pointer;color:var(--text3);font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px}
+.check-btn.done{background:var(--green);border-color:var(--green);color:#111}
+.check-btn:active{opacity:.7}
+.fasz-inner{padding:0 12px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="label-small">CPPS · Routine</div>
+        <div class="day-name" id="dayName"></div>
+      </div>
+      <div class="header-right">
+        <div class="date-str" id="dateStr"></div>
+        <div class="day-counter" id="dayCounter"></div>
+        <div class="day-nav">
+          <button class="nav-btn" onclick="changeDay(-1)">←</button>
+          <button class="nav-btn" onclick="changeDay(1)">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel"></div>
+    </div>
+  </div>
+  <div class="focus-banner">
+    <button class="focus-toggle" onclick="toggleFocus()">
+      <div>
+        <div class="focus-title">★ Fokus: ISG · Becken · BWS</div>
+        <div class="focus-sub">Testphase vor Stolzenbach — Rotationsmechanik</div>
+      </div>
+      <div class="focus-arrow" id="focusArrow">▾</div>
+    </button>
+    <div class="focus-content" id="focusContent"></div>
+  </div>
+  <div class="info-banner">
+    <button class="info-toggle" onclick="toggleInfo()">
+      <div class="info-title">Beckenboden während der Übungen</div>
+      <div class="info-arrow" id="infoArrow">▾</div>
+    </button>
+    <div class="info-content" id="infoContent">
+      <div class="info-row">
+        <div class="info-row-title">Dehnungen, Mobilisation, Fußprogramm</div>
+        <div class="info-row-text">Nicht hinspüren. Aufmerksamkeit nach außen. Der Beckenboden macht was er macht – Monitoring hält den Tonus oben.</div>
+      </div>
+      <div class="info-row">
+        <div class="info-row-title">Glute Bridges & Clamshells</div>
+        <div class="info-row-text">Bei Anstrengung ausatmen. Nicht Luft anhalten, nicht pressen. Der Ausatem verhindert Bauchdruck und reflexartiges Mitspannen.</div>
+      </div>
+      <div class="info-row">
+        <div class="info-row-title">Resonanzatmung & tiefe Hocke</div>
+        <div class="info-row-text">Nur hier bewusst öffnen. Das ist der eine Ort, wo Hinspüren erwünscht ist. Beim Ausatem öffnen wie eine Blume.</div>
+      </div>
+    </div>
+  </div>
+  <div id="routineList"></div>
+</div>
+
+<script>
+const START = new Date('2026-07-08'); // Tag 1 = heute
+const DKEY = 'cpps_done_v4';
+const MONTHS = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const DAYS = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+
+let dayOffset = 0;
+
+const C = {
+  b: 'var(--blue)',
+  y: 'var(--yellow)',
+  g: 'var(--evening)',
+  a: 'var(--accent)',
+  f: 'var(--fasz)'
+};
+
+// FOOT PROGRESSION
+function getDayNum(d) {
+  const diff = Math.floor((d - START) / 864e5);
+  return Math.max(0, diff);
+}
+function getFootPhase(d) {
+  const w = Math.floor(getDayNum(d) / 7) + 1;
+  if (w <= 3) return 1;
+  if (w <= 7) return 2;
+  if (w <= 12) return 3;
+  return 4;
+}
+function isNewFootPhase(d) {
+  const n = getDayNum(d);
+  const w = Math.floor(n / 7) + 1;
+  return n % 7 === 0 && (w === 4 || w === 8 || w === 13);
+}
+function getFootContent(d) {
+  const fp = getFootPhase(d);
+  const phases = {
+    1: {d:'~10 Min', t:'Fußsohle rollen: 2 Min./Fuß (Tennisball), Druckpunkte 20–30 Sek., links länger. Zehengreifen: 2×20 Wdh. Einbeinstand links (ebener Boden): 3×30 Sek.'},
+    2: {d:'~12 Min', t:'Fußsohle rollen: 2 Min./Fuß. Zehengreifen: 2×20 Wdh. Einbeinstand links: 3×30 Sek. Fersenheben beidseitig: 3×15 Wdh. Fersenheben links einzeln: 3×10 Wdh.'},
+    3: {d:'~15 Min', t:'Fußsohle rollen: 2 Min./Fuß. Zehengreifen: 2×20 Wdh. Einbeinstand links (unebener Untergrund): 3×30 Sek. Fersenheben beidseitig: 3×15 Wdh. Fersenheben links einzeln: 3×10 Wdh.'},
+    4: {d:'~10 Min (Erhaltung)', t:'Fußsohle rollen: 2 Min./Fuß. Einbeinstand links (uneben): 2×45 Sek. Fersenheben beidseitig: 2×15 Wdh. Fersenheben links einzeln: 2×15 Wdh.'}
+  };
+  return phases[fp];
+}
+
+// EXERCISE LISTS
+const MORNING = [
+  {c:C.b, n:'Tauchreflex', d:'3× 20 Sek.', t:'Schüssel kaltes Wasser. Stirn, Augen, Schläfen eintauchen, Atem anhalten. Je 30–60 Sek. ruhige Pause. Nach dem 3. Mal 2 Min. ruhig stehen.', stop:''},
+  {c:C.b, n:'Fußkreisen (sitzend)', d:'10× je Richtung', t:'Sitzend, Bein leicht anheben oder Knie festhalten. Fuß kreisen – 10× im Uhrzeigersinn, 10× gegen den Uhrzeigersinn.', stop:''},
+  {c:C.b, n:'Knee-to-Wall Mobilisation', d:'10–15 Wdh. + 5 extra links', t:'Fuß ~8cm vor Wand, Ferse am Boden. Knie gerade (nicht gedreht) zur Wand schieben. Mit Band: Band um Knöchel, zieht nach hinten – mehr Spielraum im Gelenk. Beidseitig, dann 5 Extra-Wdh. links.', stop:''},
+  {c:C.b, n:'Spaziergang mit Sonnenlicht', d:'10 Min', t:'Kein Handy. Aufmerksamkeit nach außen. Links Gluteus beim Abdrücken aktivieren. Zeitweise bewusst gehen: bei jedem Schritt die Becken-Seite des vorderen Beins nach vorne bringen – besonders links üben.', stop:''},
+  {c:C.b, n:'90/90 Rotation (Hip Switches)', d:'2× 10 Wdh./Seite', t:'Sitzend auf dem Boden, beide Beine in 90/90 Position. Beide Knie gleichzeitig kontrolliert zur anderen Seite fallen lassen. Langsam und kontrolliert – nicht fallen lassen. Aktiviert Hüftinnen- und Außenrotatoren.', stop:''},
+  {c:C.b, n:'Beckenrotation im Stand', d:'10× je Seite', t:'Aufrecht stehen, Hände auf den Hüften. Becken horizontal rotieren – eine Seite nach vorne, dann die andere, ohne die Schultern mitzudrehen. Langsam. Links wird schwerer sein – genau das trainieren.', stop:''},
+  {c:C.b, n:'Hamstring Dehnung', d:'60 Sek./Seite', t:'Liegend: Bein hoch, Knie leicht gebeugt, Handtuch um Fuß. Oder stehend: Ferse auf Stuhl, leicht nach vorne lehnen. Ziehen in Kniekehle = korrekt. Links intensiver – normal.', stop:'Scharfer Schmerz oder Kribbeln → Bein mehr beugen.'},
+  {c:C.b, n:'Iliopsoas Dehnung', d:'10× 10 Sek./Seite', t:'Kniend auf einem Bein, anderes Bein vorne. Becken leicht nach vorne schieben. Kein Hohlkreuz. Kurz halten, kurz loslassen – nicht statisch.', stop:''},
+  {c:C.b, n:'Gluteus Medius Stretch', d:'60–90 Sek./Seite', t:'Liegend: Knie zur Brust ziehen, dann quer über den Körper zur Gegenseite fallen lassen. Schultern am Boden lassen.', stop:''},
+  {c:C.b, n:'Neural Floss', d:'15 Wdh./Seite', t:'Stuhlkante, Rücken leicht gebeugt. Bein strecken + Kopf heben gleichzeitig. Leichtes Ziehen in Wade = korrekt.', stop:'Brennen oder Kribbeln → sofort stoppen.'},
+  {c:C.b, n:'Resonanzatmung', d:'5 Min', t:'5 Sek. ein, 5 Sek. aus. Beckenboden beim Ausatem öffnen.', stop:''},
+];
+
+const MIDDAY = [
+  {c:C.y, n:'Zehengreifen', d:'2×20 Wdh.', t:'Sitzend, Handtuch oder Socken mit Zehen zusammenziehen.', stop:''},
+  {c:C.y, n:'Einbeinstand links', d:'3×30 Sek.', t:'Stehend auf links, Fuß neutral – nicht einknicken. An Wand sichern wenn nötig. Gut für Pausen oder Telefonate.', stop:''},
+  {c:C.y, n:'Fersenheben beidseitig', d:'3×15 Wdh.', t:'Beide Füße, auf Zehenspitzen heben, langsam senken. 3 Sek. hoch, 3 Sek. runter.', stop:''},
+  {c:C.y, n:'Fersenheben links einzeln', d:'3×10 Wdh.', t:'Nur linker Fuß, langsam hoch und runter. An Wand sichern wenn nötig.', stop:''},
+  {c:C.y, n:'Theraband Eversion', d:'3×15/Seite + 1×15 links', t:'Band um den Vorfuß, Ferse am Boden fixiert. Fuß langsam nach außen drehen gegen den Widerstand, kontrolliert zurück. Nur der Fuß bewegt sich. Beidseitig 3 Sätze, dann 1 Extra-Satz links. Stärkt den Peroneus gegen das Einknicken nach innen.', stop:''},
+  {c:C.y, n:'Neural Floss', d:'15 Wdh./Seite', t:'Wie morgens – zweite Runde.', stop:'Brennen oder Kribbeln → sofort stoppen.'},
+  {c:C.y, n:'Resonanzatmung', d:'5 Min', t:'Sitzend am Schreibtisch oder stehend. 5 Sek. ein, 5 Sek. aus. Abschluss des Tagsüber-Blocks.', stop:''},
+];
+
+function getEvening(d) {
+  const foot = getFootContent(d);
+  const newPhase = isNewFootPhase(d);
+  return [
+    {c:C.g, n:'Wadendehnung – gerade Knie', d:'60 Sek./Seite', t:'Fuß gegen Wand, Knie gestreckt, Ferse am Boden. Links länger. Variante: Knie leicht Richtung Außenzehe – spürst du Ziehen in der Wade = Weichteil; Einklemmen vorne im Gelenk = Gelenkblockade.', stop:''},
+    {c:C.g, n:'Sprunggelenk Mobilisation tief', d:'8–10 Wdh.', t:'Tiefe Hocke auf linkem Fuß (Fersen erhöht wenn nötig), Ferse möglichst am Boden. Knie aktiv weiter nach vorne über die Zehe schieben. Kurz halten, leicht zurückfedern, wiederholen.', stop:''},
+    {c:C.g, n:'Hamstring Dehnung', d:'60–90 Sek./Seite', t:'Liegend: Bein hoch, Knie leicht gebeugt, Handtuch um Fuß. Oder stehend: Ferse auf Stuhl, leicht nach vorne lehnen. Ziehen in Kniekehle = korrekt. Links intensiver – normal.', stop:'Scharfer Schmerz oder Kribbeln → Bein mehr beugen.'},
+    {c:C.g, n:'Quadrizeps Dehnung (kniend, erhöht)', d:'60 Sek./Seite', t:'Ein Bein vorne im 90°-Ausfallschritt, anderes Knie am Boden, hinterer Fuß erhöht auf Bett oder Erhöhung. Becken leicht nach vorne für mehr Dehnung.', stop:''},
+    {c:C.g, n:'Pigeon Pose (Piriformis)', d:'90 Sek./Seite', t:'Vorderes Bein angewinkelt, hinteres Bein gestreckt, Matte darunter. Auf Ausatem loslassen. Links länger. Position leicht verschieben um Obturator internus zu treffen – Zucken tief im Gluteus = korrekt.', stop:''},
+    {c:C.g, n:'90/90 Stretch', d:'60–90 Sek./Seite · links +30 Sek.', t:'Sitzend auf dem Boden, beide Beine in 90/90 Position (vorderes Bein außenrotiert, hinteres innenrotiert). Oberkörper aufrecht oder leicht nach vorne lehnen. Links 30 Sek. länger halten – wird steifer sein.', stop:''},
+    {c:C.g, n:'Adduktoren (stehend ODER kniend)', d:'30 Sek./Seite', t:'Stehend: ein Bein auf Stuhl ausgestreckt, Standbein-Knie leicht gebeugt. ODER kniend: zu dehnendes Bein gestreckt zur Seite, anderes Knie am Boden. Je nach Tag wählen. Erst nach Aufwärmen.', stop:''},
+    {c:C.g, n:'Cobra', d:'15–30 Sek.', t:'Bauchlage, Hände unter den Schultern, Oberkörper langsam aufrichten, Becken am Boden lassen.', stop:'', reps:'3×'},
+    {c:C.g, n:'Knee Pull', d:'30 Sek./Seite', t:'Rückenlage auf festem Untergrund. Ein Bein unterhalb des Knies greifen, zur Brust ziehen und halten. Seite wechseln.', stop:'Stechendes Blockiergefühl in der Leiste → nicht forcieren.', reps:'3×'},
+    {c:C.g, n:'Beckenkippen', d:'5–10 Sek. halten', t:'Rückenlage, Knie gebeugt. Bauch und Gesäß anspannen, Becken kippen, LWS flach auf Boden drücken und halten. Dann loslassen.', stop:'', reps:'3×'},
+    {c:C.g, n:'Quadratus Lumborum', d:'30 Sek./Seite', t:'Stehend, Hände auf Hüften. Ein Bein vor das andere kreuzen. Hüften biegen um ein C zu formen, andere Körperseite strecken.', stop:'', reps:'3×'},
+    {c:C.g, n:'Glute Bridges', d:'2×15 Wdh.', t:'Rückenlage, Knie gebeugt, Füße hüftbreit. Becken heben – Gluteus bewusst anspannen, oben 2 Sek. halten. Kein Pressen, nicht ins Hohlkreuz. Langsam absenken. Kräftigt Gluteus Maximus.', stop:'Beckenboden spannt mit → Bewegung kleiner machen.'},
+    {c:C.g, n:'Clamshells', d:'2×15 Wdh./Seite + 1×15 links', t:'Seitlage, Knie 90° angewinkelt, Füße zusammen. Oberes Knie öffnen wie eine Muschel, Becken bleibt stabil (nicht mitrollen). Langsam zurück. Beidseitig 2 Sätze, dann 1 Extra-Satz links. Kräftigt Gluteus Medius.', stop:''},
+    {c:C.g, n:'Fußprogramm', d:foot.d, t:foot.t, stop:'', newPhase:newPhase},
+    {c:C.g, n:'Resonanzatmung in tiefer Hocke', d:'5 Min', t:'Fersen erhöht wenn Sprunggelenk limitiert. Rücken so aufrecht wie möglich. 5 Sek. ein, 5 Sek. aus. Beckenboden beim Ausatem öffnen.', stop:''},
+    {c:C.g, n:'Neural Floss', d:'15 Wdh./Seite', t:'Dritte Runde – sanft, bevor du ins Bett gehst.', stop:'Brennen oder Kribbeln → sofort stoppen.'},
+  ];
+}
+
+const FASZIEN = [
+  {c:C.f, n:'Gluteus (Lacrosseball)', d:'2×60 Sek./Seite', t:'Druckpunkt finden, statisch verharren. Kein Rollen. Auf Ausatem einsinken. Schmerz 3–4/10.', stop:''},
+  {c:C.f, n:'Gluteus Medius (Faszienrolle)', d:'3×10/Seite – sanft', t:'Körpergewicht abstützen. Langsam bis Druckpunkt, 20–30 Sek. verharren. 2–3/10 Druck.', stop:''},
+  {c:C.f, n:'Oberschenkel (Foam Roller)', d:'2 Min./Seite', t:'Hamstrings und Adduktoren. Druckpunkte 20–30 Sek. halten. LWS niemals rollen.', stop:''},
+  {c:C.f, n:'Bauch (Pinch and Roll)', d:'5 Min', t:'Haut zwischen Daumen und Zeigefinger greifen, von oben nach unten. Nur oberflächliche Faszie. Unterbauch sanfter.', stop:''},
+  {c:C.f, n:'Pubis (Ball/Finger)', d:'3–4 Min – sanft', t:'Statischer Druck am Schambein und 2–3 cm darüber. Max. 2–3/10. Kein Rollen. Nicht täglich.', stop:''},
+  {c:C.f, n:'Perineum (Ball)', d:'5 Min – sanft', t:'Links und rechts der Mittellinie. Statischer Druck auf Verhärtungen. 3–4/10 Druck. Nicht täglich.', stop:'Elektrischer Reiz → Druck sofort reduzieren.'},
+];
+
+const FOCUS = [
+  {g:'A · BWS-Rotation', items:[
+    {n:'Open Book', d:'10 Wdh./Seite', t:'Seitlage, Knie vorne 90° übereinander, Arme gestreckt vorne. Oberen Arm wie ein Buch nach hinten öffnen, Blick folgt der Hand. Knie bleiben zusammen, Becken dreht NICHT mit. Am Endpunkt 2–3 Sek. halten.'},
+    {n:'Thread the Needle', d:'10 Wdh./Seite', t:'Vierfüßlerstand. Einen Arm unter dem Körper zur Gegenseite durchführen, Schulter/Kopf sinken. BWS rotiert ein. Zurück und leicht zur offenen Seite auf-rotieren.'},
+    {n:'Supine Twist (3 Stufen)', d:'60–90 Sek./Seite', t:'Start wo Schulter GERADE NOCH am Boden bleibt. St1: beide Knie angewinkelt. St2 (aktuell): oberes Bein angewinkelt, unteres gestreckt, Kissen unters Knie (~15cm). St3: gestreckt, Kissen über Wochen flacher. Schulter nie runterdrücken.'},
+  ]},
+  {g:'B · ISG & Becken', items:[
+    {n:'ISG-Mobilisation (Knee-to-Chest)', d:'30 Sek. + 10× puls./Seite', t:'Rückenlage, ein Knie zur gegenüberliegenden Schulter ziehen, leicht über den Körper. Halten, dann sanft pulsieren. Links bei stechendem Blockiergefühl nachlassen.'},
+    {n:'Windshield Wipers', d:'10 Wdh./Seite', t:'Rückenlage, Knie aufgestellt hüftbreit. Beide Knie zusammen langsam nach links/rechts kippen. Kontrolliert, nur so weit wie locker.'},
+    {n:'Becken-Cat-Cow', d:'2× 15 Wdh.', t:'Vierfüßlerstand. Becken abwechselnd nach vorne (Hohlkreuz) und hinten (Rundrücken) kippen. Aus Becken/LWS, nicht aus dem Nacken.'},
+    {n:'Beckenrotation im Stand', d:'2× 10 Wdh./Seite', t:'Aufrecht, Füße flach, Hände auf Hüften. Becken horizontal rotieren wie eine Drehtür. Schultern ruhig. Links schwerer — genau das üben.'},
+    {n:'90/90 Rotation (Hip Switches)', d:'2× 10 Wdh./Seite', t:'Sitzend, beide Beine 90/90. Beide Knie gleichzeitig kontrolliert zur Gegenseite fallen lassen und wechseln. Geführt, nicht fallen lassen.'},
+    {n:'Becken-Bridge Wand + Rolle', d:'2× 10 Wdh./Seite', t:'Rückenlage, Beine 90° an der Wand, Rolle zwischen den Knien. Becken leicht anheben, abwechselnd eine Hüfte höher schieben. Aus dem Becken, nicht ins Hohlkreuz. Bei Anstrengung ausatmen.'},
+  ]},
+  {g:'C · Untere Kette', items:[
+    {n:'Sprunggelenk Mob. tief (Hocke)', d:'8–10 Wdh. · links', t:'Tiefe Hocke, Ferse am Boden (erhöht wenn nötig), Knie aktiv nach vorne über die Zehe schieben, leicht zurückfedern.'},
+    {n:'Knee-to-Wall + Band', d:'10–15 Wdh. +5 links', t:'Fuß ~8cm vor Wand, Ferse am Boden, Knie zur Wand. Band um Knöchel zieht nach hinten — mehr Gleitraum.'},
+  ]},
+  {g:'D · Trigger lösen', items:[
+    {n:'Gluteus Medius rollen', d:'3× 10/Seite · sanft', t:'Auf dem Ball, Gewicht abstützen, langsam bis Druckpunkt, 20–30 Sek. verharren. Stärkster Einzeltrigger.'},
+    {n:'Pigeon Pose', d:'90 Sek./Seite', t:'Vorderes Bein angewinkelt, hinteres gestreckt. Auf Ausatem loslassen. Links länger. Position leicht verschieben trifft Obturator internus.'},
+  ]},
+  {g:'E · Zielverhalten + Basis', items:[
+    {n:'Bewusstes Rotationsgehen', d:'5–10 Min', t:'Nach der Session gehen, Becken bei jedem Schritt bewusst mitrotieren. Dezent, nicht extrem.'},
+    {n:'Resonanzatmung', d:'5 Min', t:'5 Sek. ein, 5 Sek. aus. Beckenboden beim Ausatem öffnen. Einziger Ort für bewusstes Hinspüren.'},
+  ]},
+];
+
+function getDate() {
+  const d = new Date();
+  d.setDate(d.getDate() + dayOffset);
+  d.setHours(12,0,0,0);
+  return d;
+}
+function dateKey(d) { return d.toISOString().slice(0,10); }
+
+function load() { try { return JSON.parse(localStorage.getItem(DKEY)||'{}'); } catch(e) { return {}; } }
+function save(v) { try { localStorage.setItem(DKEY, JSON.stringify(v)); } catch(e) {} }
+
+function renderHeader(d) {
+  document.getElementById('dayName').textContent = DAYS[d.getDay()];
+  const dateStr = d.getDate() + '. ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  document.getElementById('dateStr').textContent = dateStr;
+  const dayNum = getDayNum(d) + 1;
+  document.getElementById('dayCounter').textContent = dayNum > 0 ? 'Tag ' + dayNum : '–';
+}
+
+function renderProgress(d, done, key) {
+  const evening = getEvening(d);
+  const all = [...MORNING, ...MIDDAY, ...evening];
+  const total = all.length;
+  let checked = 0;
+  ['morning','midday','evening'].forEach(slot => {
+    const list = slot === 'morning' ? MORNING : slot === 'midday' ? MIDDAY : evening;
+    list.forEach((_, i) => { if (done[key + '_' + slot + '_' + i]) checked++; });
+  });
+  const pct = total > 0 ? Math.round(checked / total * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = checked + '/' + total;
+}
+
+function renderBlock(slot, items, done, key) {
+  const labels = {morning:'Morgens', midday:'Tagsüber', evening:'Abends'};
+  const cls = slot === 'morning' ? 'morgens' : slot === 'midday' ? 'tagsüber' : 'abends';
+  let html = `<div class="block">
+    <div class="block-header">
+      <div class="block-dot ${cls}"></div>
+      <div class="block-label ${cls}">${labels[slot]}</div>
+      <div class="block-line"></div>
+    </div>`;
+  items.forEach((ex, i) => {
+    const k = key + '_' + slot + '_' + i;
+    const isDone = !!done[k];
+    html += `<div class="ex-item">
+      <div class="ex-left"><div class="ex-dot" style="background:${ex.c}"></div></div>
+      <div class="ex-body">
+        <div class="ex-name">${ex.n}</div>
+        <div class="ex-dose">${ex.reps ? ex.reps + ' · ' : ''}${ex.d}</div>
+        ${ex.t ? `<div class="ex-note">${ex.t}</div>` : ''}
+        ${ex.stop ? `<div class="ex-stop">Stop: ${ex.stop}</div>` : ''}
+        ${ex.newPhase ? `<div class="new-phase">● Neue Stufe!</div>` : ''}
+      </div>
+      <button class="check-btn${isDone?' done':''}" onclick="toggle('${k}')">${isDone?'✓':''}</button>
+    </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderFaszien(done, key) {
+  const faszOpen = localStorage.getItem('fasz_open') === '1';
+  let html = `<div class="block">
+    <div class="block-header">
+      <div class="block-dot faszien"></div>
+      <div class="block-label faszien">Faszien & Rollen</div>
+      <div class="block-line"></div>
+    </div>
+    <button class="fasz-toggle" onclick="toggleFasz()">
+      <div class="fasz-toggle-left">
+        <div>
+          <div class="fasz-toggle-label">Faszienarbeit</div>
+          <div class="fasz-toggle-sub">Täglich (außer 3 Tage vor ESWT)</div>
+        </div>
+      </div>
+      <div class="fasz-arrow${faszOpen?' open':''}" id="faszArrow">▾</div>
+    </button>
+    <div class="fasz-content${faszOpen?' open':''}" id="faszContent">
+      <div class="fasz-inner">`;
+  FASZIEN.forEach((ex, i) => {
+    const k = key + '_fasz_' + i;
+    const isDone = !!done[k];
+    html += `<div class="ex-item">
+      <div class="ex-left"><div class="ex-dot" style="background:${ex.c}"></div></div>
+      <div class="ex-body">
+        <div class="ex-name">${ex.n}</div>
+        <div class="ex-dose">${ex.d}</div>
+        ${ex.t ? `<div class="ex-note">${ex.t}</div>` : ''}
+        ${ex.stop ? `<div class="ex-stop">Stop: ${ex.stop}</div>` : ''}
+      </div>
+      <button class="check-btn${isDone?' done':''}" onclick="toggle('${k}')">${isDone?'✓':''}</button>
+    </div>`;
+  });
+  html += '</div></div></div>';
+  return html;
+}
+
+function render() {
+  const d = getDate();
+  const key = dateKey(d);
+  const done = load();
+  renderHeader(d);
+  const evening = getEvening(d);
+  let html = '';
+  html += renderBlock('morning', MORNING, done, key);
+  html += renderBlock('midday', MIDDAY, done, key);
+  // Faszien Banner as first item in Abends block
+  html += `<div class="block">
+    <div class="block-header">
+      <div class="block-dot abends"></div>
+      <div class="block-label abends">Abends</div>
+      <div class="block-line"></div>
+    </div>`;
+  // Faszien collapsible
+  const faszOpen = localStorage.getItem('fasz_open') === '1';
+  html += `<button class="fasz-toggle" onclick="toggleFasz()">
+      <div class="fasz-toggle-left">
+        <div>
+          <div class="fasz-toggle-label">Faszienarbeit & Rollen</div>
+          <div class="fasz-toggle-sub">Täglich möglich · 3 Tage vor ESWT pausieren</div>
+        </div>
+      </div>
+      <div class="fasz-arrow${faszOpen?' open':''}" id="faszArrow">▾</div>
+    </button>
+    <div class="fasz-content${faszOpen?' open':''}" id="faszContent">
+      <div class="fasz-inner">`;
+  FASZIEN.forEach((ex, i) => {
+    const k = key + '_fasz_' + i;
+    const isDone = !!done[k];
+    html += `<div class="ex-item">
+      <div class="ex-left"><div class="ex-dot" style="background:${ex.c}"></div></div>
+      <div class="ex-body">
+        <div class="ex-name">${ex.n}</div>
+        <div class="ex-dose">${ex.d}</div>
+        ${ex.t ? `<div class="ex-note">${ex.t}</div>` : ''}
+        ${ex.stop ? `<div class="ex-stop">Stop: ${ex.stop}</div>` : ''}
+      </div>
+      <button class="check-btn${isDone?' done':''}" onclick="toggle('${k}')">${isDone?'✓':''}</button>
+    </div>`;
+  });
+  html += '</div></div>';
+  // Evening exercises
+  evening.forEach((ex, i) => {
+    const k = key + '_evening_' + i;
+    const isDone = !!done[k];
+    html += `<div class="ex-item">
+      <div class="ex-left"><div class="ex-dot" style="background:${ex.c}"></div></div>
+      <div class="ex-body">
+        <div class="ex-name">${ex.n}</div>
+        <div class="ex-dose">${ex.reps ? ex.reps + ' · ' : ''}${ex.d}</div>
+        ${ex.t ? `<div class="ex-note">${ex.t}</div>` : ''}
+        ${ex.stop ? `<div class="ex-stop">Stop: ${ex.stop}</div>` : ''}
+        ${ex.newPhase ? `<div class="new-phase">● Neue Stufe!</div>` : ''}
+      </div>
+      <button class="check-btn${isDone?' done':''}" onclick="toggle('${k}')">${isDone?'✓':''}</button>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('routineList').innerHTML = html;
+  renderFocus();
+  renderProgress(d, done, key);
+}
+
+function toggle(k) {
+  const done = load();
+  if (done[k]) delete done[k];
+  else done[k] = 1;
+  save(done);
+  render();
+}
+
+function renderFocus() {
+  const d = getDate();
+  const key = dateKey(d);
+  const done = load();
+  let html = '';
+  FOCUS.forEach((grp, gi) => {
+    html += `<div class="focus-group">${grp.g}</div>`;
+    grp.items.forEach((ex, i) => {
+      const k = key + '_focus_' + gi + '_' + i;
+      const isDone = !!done[k];
+      html += `<div class="ex-item">
+        <div class="ex-left"><div class="ex-dot" style="background:var(--blue)"></div></div>
+        <div class="ex-body">
+          <div class="ex-name">${ex.n}</div>
+          <div class="ex-dose">${ex.d}</div>
+          ${ex.t ? `<div class="ex-note">${ex.t}</div>` : ''}
+        </div>
+        <button class="check-btn${isDone?' done':''}" onclick="toggle('${k}')">${isDone?'✓':''}</button>
+      </div>`;
+    });
+  });
+  document.getElementById('focusContent').innerHTML = html;
+}
+
+function toggleFocus() {
+  const isOpen = localStorage.getItem('focus_open') === '1';
+  localStorage.setItem('focus_open', isOpen ? '0' : '1');
+  document.getElementById('focusContent').classList.toggle('open');
+  document.getElementById('focusArrow').classList.toggle('open');
+}
+
+function toggleInfo() {
+  const isOpen = localStorage.getItem('info_open') === '1';
+  localStorage.setItem('info_open', isOpen ? '0' : '1');
+  document.getElementById('infoContent').classList.toggle('open');
+  document.getElementById('infoArrow').classList.toggle('open');
+}
+
+function toggleFasz() {
+  const isOpen = localStorage.getItem('fasz_open') === '1';
+  localStorage.setItem('fasz_open', isOpen ? '0' : '1');
+  render();
+}
+
+function changeDay(delta) {
+  dayOffset += delta;
+  render();
+}
+
+if (localStorage.getItem('focus_open') === '1') {
+  document.getElementById('focusContent').classList.add('open');
+  document.getElementById('focusArrow').classList.add('open');
+}
+
+if (localStorage.getItem('info_open') === '1') {
+  document.getElementById('infoContent').classList.add('open');
+  document.getElementById('infoArrow').classList.add('open');
+}
+
+render();
+</script>
+</body>
+</html>
